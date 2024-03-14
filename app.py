@@ -1,21 +1,24 @@
 import requests
-from flask import Flask, jsonify, abort
+from flask import Flask, jsonify, redirect, url_for
 from datetime import datetime
+from base.Settings import url_base
 
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    abort(404)
+def redirect_to_pemilu():
+    # redirect to 
+    return redirect(url_for('pemilu'))
+    
 
 @app.route('/pemilu2024')
 def pemilu():
     # Fetch data from the first URL
-    response1 = requests.get("https://sirekap-obj-data.kpu.go.id/pemilu/hhcw/ppwp.json")
+    response1 = requests.get(f"{url_base}pemilu/hhcw/ppwp.json")
     data1 = response1.json()
 
     # Fetch data from the second URL
-    response2 = requests.get("https://sirekap-obj-data.kpu.go.id/pemilu/ppwp.json")
+    response2 = requests.get(f"{url_base}pemilu/ppwp.json")
     data2 = response2.json()
 
     total_votes = sum(data1['chart'][key] for key in data1['chart'] if key != 'persen')
